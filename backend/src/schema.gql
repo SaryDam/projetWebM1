@@ -1,0 +1,43 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Utilisateur {
+  id: ID!
+  nom: String!
+  email: String!
+  motDePasse: String!
+}
+
+type Message {
+  id: ID!
+  auteur: Utilisateur!
+  contenu: String!
+  dateEnvoi: DateTime!
+  conversation: Conversation!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Conversation {
+  id: ID!
+  participants: [Utilisateur!]!
+  messages: [Message!]!
+  dernierMessage: String!
+  dateDerniereMiseAJour: DateTime!
+}
+
+type Query {
+  utilisateurs: [Utilisateur!]!
+  getConversations(userId: String!): [Conversation!]!
+  getMessages(conversationId: String!): [Message!]!
+}
+
+type Mutation {
+  createUtilisateur(nom: String!, email: String!, motDePasse: String!): Utilisateur!
+  createConversation(participantIds: [String!]!): Conversation!
+  sendMessage(conversationId: String!, authorId: String!, contenu: String!): Conversation!
+}
