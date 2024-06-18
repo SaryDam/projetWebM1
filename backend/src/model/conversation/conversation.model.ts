@@ -1,22 +1,15 @@
-import {Field, ID, ObjectType} from '@nestjs/graphql';
-import {Utilisateur} from '../utilisateur/utilisateur.model';
+import {Field, ObjectType} from '@nestjs/graphql';
 import {Message} from '../message/message.model';
-import {DateTimeResolver} from "graphql-scalars";
+import {Utilisateur} from '../utilisateur/utilisateur.model';
 
 @ObjectType()
 export class Conversation {
-  @Field(() => ID)
-  id: string;
+    @Field()
+    id: string;
 
-  @Field(() => [Utilisateur])
-  participants: Utilisateur[];
+    @Field(() => [Utilisateur])
+    participants: Utilisateur[];
 
-  @Field(() => [Message])
-  messages: Message[];
-
-  @Field()
-  dernierMessage: string;
-
-  @Field(() => DateTimeResolver)
-  dateDerniereMiseAJour: Date;
+    @Field(() => [Message], {nullable: true})
+    messages?: Message[];
 }

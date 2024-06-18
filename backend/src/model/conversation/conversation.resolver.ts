@@ -1,20 +1,14 @@
-import {Resolver, Mutation, Args, Query} from '@nestjs/graphql';
+import {Args, Mutation, Query, Resolver} from '@nestjs/graphql';
 import {ConversationService} from './conversation.service';
 import {Conversation} from './conversation.model';
-import {Message} from '../message/message.model';
 import {UtilisateurService} from '../utilisateur/utilisateur.service';
-import {InjectQueue} from '@nestjs/bull';
-import {Queue} from 'bullmq';
-import {Logger} from '@nestjs/common';
+import {Message} from '../message/message.model';
 
 @Resolver(() => Conversation)
 export class ConversationResolver {
-    private readonly logger = new Logger(ConversationResolver.name);
-
     constructor(
         private readonly conversationService: ConversationService,
         private readonly utilisateurService: UtilisateurService,
-        @InjectQueue('message-queue') private readonly messageQueue: Queue,
     ) {
     }
 
@@ -24,10 +18,9 @@ export class ConversationResolver {
     }
 
     @Mutation(() => Conversation)
-    async createConversation(
+    createConversation(
         @Args({name: 'participantIds', type: () => [String]}) participantIds: string[],
-    ): Promise<Conversation> {
-        this.logger.log(`Création d'une conversation avec les participants ${participantIds}`);
+    ): Conversation {
         return this.conversationService.createConversation(participantIds);
     }
 
@@ -37,25 +30,24 @@ export class ConversationResolver {
         @Args('authorId') authorId: string,
         @Args('contenu') contenu: string,
     ): Promise<boolean> {
-        this.logger.log(`Réception de la demande d'envoi de message pour la conversation ${conversationId} de l'auteur ${authorId}`);
-
         const auteur = this.utilisateurService.findById(authorId);
         if (!auteur) {
-            this.logger.error(`Utilisateur avec id ${authorId} non trouvé`);
-            throw new Error(`Utilisateur avec id ${authorId} non trouvé`);
+            throw new Error(`User with id ${authorId} not found`);
         }
 
-        const newMessage = {
+        const newMessage: Message = {
             id: Date.now().toString(),
-            auteur: {id: authorId, nom: auteur.nom},
+            auteur,
             contenu,
             dateEnvoi: new Date(),
             conversation: {id: conversationId} as Conversation,
-        } as Message;
+        };
 
-        // Ajoutez le message à la queue
-        await this.messageQueue.add('sendMessage', newMessage);
-        this.logger.log(`Message ajouté à la file d'attente avec les données : ${JSON.stringify(newMessage)}`);
+        // Log the message before adding it
+        console.log(`Adding message: ${JSON.stringify(newMessage)}`);
+
+        // Add the message to the conversation
+        this.conversationService.addMessage(conversationId, newMessage);
         return true;
     }
 }
