@@ -2,14 +2,18 @@ name: Backend CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "master" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "master" ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        node-version: [20,x]
+        
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -24,6 +28,10 @@ jobs:
 
     - name: Install dependencies
       run: npm install
+      working-directory: ./backend
+
+    - name: Build the project
+      run: npm run build
       working-directory: ./backend
 
     - name: Run backend tests
