@@ -1,9 +1,9 @@
-## Groupe :
+## Groupe 7 :
 
 - Creux Damien
 - Kus Serhat
 - Nelhome Lhukas
-- Povedamaral Valentin
+- Poveda Amaral Valentin
 
 
 # Étude de Faisabilité
