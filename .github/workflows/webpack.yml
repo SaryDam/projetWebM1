@@ -29,5 +29,6 @@ jobs:
 
     - name: Build
       run: |
+        cd backend
         npm install
         npx webpack
