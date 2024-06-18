@@ -74,3 +74,5 @@ Redis est une base de données NoSQL en mémoire, souvent utilisée comme cache 
 - **TypeScript et Décorateurs** : NestJS et GraphQL utilisent TypeScript, permettant de bénéficier de la typage statique, de l'auto-complétion et d'une meilleure documentation.
 - **Documentation Intégrée de GraphQL** : Simplifie la collaboration entre les équipes front-end et back-end grâce à une documentation interactive.
 - **Gestion des Sessions** : Redis peut être utilisé pour stocker des sessions utilisateur, améliorant ainsi la gestion des utilisateurs et les performances de l'application.
+
+- test CI/CD
