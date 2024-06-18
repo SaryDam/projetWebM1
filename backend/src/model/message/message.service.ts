@@ -1,20 +1,20 @@
-import { Injectable } from '@nestjs/common';
-import { Message } from './message.model';
+import {Inject, Injectable} from '@nestjs/common';
+import {Redis} from 'ioredis';
+import {Message} from './message.model';
 
 @Injectable()
 export class MessageService {
-  private messages: Message[] = [];
+    constructor(@Inject('REDIS_CLIENT') private readonly redis: Redis) {
+    }
 
-  findByConversation(conversationId: string): Message[] {
-    return this.messages.filter(message => message.conversation.id === conversationId);
-  }
+    async createMessage(message: Message): Promise<void> {
+        await this.redis.hset('messages', message.id, JSON.stringify(message));
+    }
 
-  createMessage(data: Partial<Message>): Message {
-    const newMessage = {
-      id: Date.now().toString(),
-      ...data,
-    } as Message;
-    this.messages.push(newMessage);
-    return newMessage;
-  }
+    async getMessages(conversationId: string): Promise<Message[]> {
+        const messages = await this.redis.hvals('messages');
+        return messages
+            .map((msg: string) => JSON.parse(msg))
+            .filter((msg: Message) => msg.conversation.id === conversationId);
+    }
 }

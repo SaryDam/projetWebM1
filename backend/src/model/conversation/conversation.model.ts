@@ -1,6 +1,7 @@
-import { ObjectType, Field, ID } from '@nestjs/graphql';
-import { Utilisateur } from '../utilisateur/utilisateur.model';
-import { Message } from '../message/message.model';
+import {Field, ID, ObjectType} from '@nestjs/graphql';
+import {Utilisateur} from '../utilisateur/utilisateur.model';
+import {Message} from '../message/message.model';
+import {DateTimeResolver} from "graphql-scalars";
 
 @ObjectType()
 export class Conversation {
@@ -16,6 +17,6 @@ export class Conversation {
   @Field()
   dernierMessage: string;
 
-  @Field()
+  @Field(() => DateTimeResolver)
   dateDerniereMiseAJour: Date;
 }
