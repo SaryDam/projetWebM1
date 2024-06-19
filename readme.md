@@ -6,8 +6,6 @@
 - Poveda Amaral Valentin
 
 
-test 2
-
 # Étude de Faisabilité
 
 ## Étude du Fonctionnement de NestJS

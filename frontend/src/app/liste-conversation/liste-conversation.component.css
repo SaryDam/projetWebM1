@@ -1,0 +1,22 @@
+.container{
+  width: 100%;
+  border-right: 1px solid black;
+  height: 90vh;
+  border-top-left-radius: 15px;
+}
+.conversation{
+  display: grid;
+  grid-template-columns: 0.3fr 1fr 1fr;
+  border-bottom: 2px solid black;
+}
+
+.containerImg{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+.containerImg img{
+  width: 90%;
+}
+
