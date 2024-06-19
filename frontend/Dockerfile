@@ -1,4 +1,4 @@
-# Utiliser l'image officielle Node.js 20 comme image de base
+# Utiliser l'image officielle Node.js 16 comme image de base
 FROM node:20
 
 # Définir le répertoire de travail dans le conteneur
@@ -13,11 +13,14 @@ RUN npm install
 # Copier tout le contenu du projet dans le répertoire de travail
 COPY . .
 
-# Compiler le projet NestJS
+# Construire le projet React
 RUN npm run build
 
+# Installer un serveur statique pour servir les fichiers construits
+RUN npm install -g serve
+
 # Exposer le port sur lequel l'application écoute
-EXPOSE 3000
+EXPOSE 5000
 
 # Définir la commande pour démarrer l'application
-CMD ["npm", "run", "start:prod"]
+CMD ["serve", "-s", "build"]
