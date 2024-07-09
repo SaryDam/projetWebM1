@@ -9,10 +9,10 @@ export class ConversationService {
 
     async create(
         newConversationInput: NewConversation,
-        utilisateurId: number,
+        userId: number,
     ) {
         const userIdsSet = new Set<number>(newConversationInput.participantIds);
-        userIdsSet.add(utilisateurId);
+        userIdsSet.add(userId);
 
         const userIds = Array.from(userIdsSet);
 

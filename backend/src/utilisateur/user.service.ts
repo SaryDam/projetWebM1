@@ -7,7 +7,7 @@ export class UserService {
     constructor(private prisma: PrismaService) {}
 
     create(createUserInput: CreateUser) {
-        return this.prisma.utilisateur.create({
+        return this.prisma.user.create({
             data: {
                 ...createUserInput,
             },
@@ -15,10 +15,10 @@ export class UserService {
     }
 
     findAll() {
-        return this.prisma.utilisateur.findMany();
+        return this.prisma.user.findMany();
     }
 
     findOne(username: string) {
-        return this.prisma.utilisateur.findUnique({ where: { username } });
+        return this.prisma.user.findUnique({ where: { username } });
     }
 }

@@ -8,9 +8,12 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=production
-      - DATABASE_URL=postgresql://myuser:mypassword@postgres:5432/projetWebM1
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/projetWebM1
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+      - JWT_SECRET=my_super_secret_key
+    env_file:
+      - ./backend/.env
     depends_on:
       - redis
       - postgres
