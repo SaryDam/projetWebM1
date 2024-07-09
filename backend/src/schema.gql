@@ -2,18 +2,11 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Utilisateur {
-  id: ID!
-  nom: String!
-  email: String!
-  motDePasse: String!
-}
-
 type Message {
-  id: ID!
-  auteur: Utilisateur!
-  contenu: String!
-  dateEnvoi: DateTime!
+  id: Int!
+  content: String!
+  timestamp: DateTime!
+  user: User!
   conversation: Conversation!
 }
 
@@ -22,22 +15,32 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type Conversation {
-  id: ID!
-  participants: [Utilisateur!]!
+type User {
+  id: Int!
+  email: String!
+  name: String!
+  password: String!
   messages: [Message!]!
-  dernierMessage: String!
-  dateDerniereMiseAJour: DateTime!
+  conversations: [Conversation!]!
+}
+
+type Conversation {
+  id: Int!
+  name: String!
+  users: [User!]!
+  messages: [Message!]!
 }
 
 type Query {
-  utilisateurs: [Utilisateur!]!
-  getConversations(userId: String!): [Conversation!]!
-  getMessages(conversationId: String!): [Message!]!
+  user(id: Int!): User!
+  userConversations(userId: Int!): [Conversation!]!
+  conversation(id: Int!): Conversation!
+  conversationMessages(conversationId: Int!): [Message!]!
+  message(id: Int!): Message!
 }
 
 type Mutation {
-  createUtilisateur(nom: String!, email: String!, motDePasse: String!): Utilisateur!
-  createConversation(participantIds: [String!]!): Conversation!
-  sendMessage(conversationId: String!, authorId: String!, contenu: String!): Conversation!
+  createUser(email: String!, name: String!, password: String!): User!
+  createConversation(userIds: [Int!]!, name: String!): Conversation!
+  sendMessage(userId: Int!, conversationId: Int!, content: String!): Message!
 }
