@@ -1,0 +1,9 @@
+overwrite: true
+schema: "http://localhost:3000/graphql" # URL de votre serveur GraphQL
+documents: "src/app/graphql/*.graphql" # Chemin vers vos fichiers de requêtes GraphQL
+generates:
+  src/app/graphql/generated.ts:
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-apollo-angular"

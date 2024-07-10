@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import {GraphqlService} from "../Services/graphql.service";
 
 @Component({
   selector: 'app-connexion-page',
@@ -7,7 +8,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./connexion-page.component.css']
 })
 export class ConnexionPageComponent {
-  constructor(private router: Router) {}
+  constructor(private router: Router,
+              private graphqlService: GraphqlService) {}
 
   signUpForm = {
     name: '',
@@ -27,13 +29,27 @@ export class ConnexionPageComponent {
   }
 
   onSignUp() {
-    // Handle sign up logic here
-    console.log('Sign up form data:', this.signUpForm);
+    this.graphqlService.createUser(this.signInForm.email,this.signUpForm.name, this.signInForm.password).subscribe(
+      (user) => {
+        console.log('User created in:', user);
+      },
+      (error) => {
+        console.error('Error created in:', error);
+      }
+    );
   }
 
   onSignIn() {
-    // Handle sign in logic here
-    console.log('Sign in form data:', this.signInForm);
-    this.router.navigate(['/chat']);
+    this.graphqlService.login(this.signInForm.email, this.signInForm.password).subscribe(
+      (user) => {
+        if(user == null){
+          alert("Mot de passe ou identifiants incorrect")
+        }
+        console.log('User logged in:', user);
+      },
+      (error) => {
+        console.error('Error logging in:', error);
+      }
+    );
   }
 }

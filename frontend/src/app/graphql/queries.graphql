@@ -1,0 +1,71 @@
+# src/app/graphql/queries.graphql
+
+query getUser($id: Int!) {
+  user(id: $id) {
+    id
+    email
+    name
+  }
+}
+
+query getUserConversations($userId: Int!) {
+  userConversations(userId: $userId) {
+    id
+    name
+    users {
+      id
+      email
+    }
+  }
+}
+
+query getConversationMessages($conversationId: Int!) {
+  conversationMessages(conversationId: $conversationId) {
+    id
+    content
+    timestamp
+    user {
+      id
+      email
+    }
+  }
+}
+
+mutation createUser($email: String!, $name: String!, $password: String!) {
+  createUser(email: $email, name: $name, password: $password) {
+    id
+    email
+    name
+  }
+}
+
+mutation login($email: String!, $password: String!) {
+  login(email: $email, password: $password) {
+    id
+    email
+    name
+  }
+}
+
+mutation createConversation($userIds: [Int!]!, $name: String!) {
+  createConversation(userIds: $userIds, name: $name) {
+    id
+    name
+  }
+}
+
+mutation sendMessage($userId: Int!, $conversationId: Int!, $content: String!) {
+  sendMessage(userId: $userId, conversationId: $conversationId, content: $content) {
+    id
+    content
+    timestamp
+    user {
+      id
+      email
+    }
+    conversation {
+      id
+      name
+    }
+  }
+}

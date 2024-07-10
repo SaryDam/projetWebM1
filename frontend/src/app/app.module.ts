@@ -11,6 +11,7 @@ import { ConnexionPageComponent } from './connexion-page/connexion-page.componen
 import { HomeChatComponent } from './home-chat/home-chat.component';
 import { ListeConversationComponent } from './liste-conversation/liste-conversation.component';
 import { ConversationComponent } from './conversation/conversation.component';
+import {GraphQLModule} from "./graphql.module";
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { ConversationComponent } from './conversation/conversation.component';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    GraphQLModule
   ],
   providers: [MessageService],
   bootstrap: [AppComponent]
