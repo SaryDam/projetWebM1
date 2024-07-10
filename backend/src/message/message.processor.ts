@@ -1,16 +1,25 @@
-import { Processor, Process } from '@nestjs/bull';
+import { Process, Processor } from '@nestjs/bull';
 import { Job } from 'bull';
 import { MessageService } from './message.service';
-import { Message } from '@prisma/client';
 
-@Processor('message')
+@Processor('message-queue')
 export class MessageProcessor {
   constructor(private messageService: MessageService) {}
 
   @Process('sendMessage')
-  async handleSendMessage(job: Job): Promise<Message> {
+  async handleSendMessage(job: Job) {
     const { userId, conversationId, content } = job.data;
-    const message = await this.messageService.sendMessage(userId, conversationId, content);
-    return message;
+    console.log('Processing job', job.data);
+
+    // Assurez-vous que cette ligne ne crée pas de nouvelle entrée dans la queue
+    const message = await this.messageService.prisma.message.create({
+      data: {
+        content,
+        user: { connect: { id: userId } },
+        conversation: { connect: { id: conversationId } },
+      },
+    });
+
+    console.log('Message created', message);
   }
 }

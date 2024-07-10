@@ -45,6 +45,10 @@ export class ConnexionPageComponent {
         if(user == null){
           alert("Mot de passe ou identifiants incorrect")
         }
+        else{
+          alert("connexion reussi")
+          this.router.navigate(['/chat/0']);
+        }
         console.log('User logged in:', user);
       },
       (error) => {

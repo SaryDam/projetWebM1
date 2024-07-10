@@ -8,12 +8,20 @@ query getUser($id: Int!) {
   }
 }
 
+query GetAllUsers {
+  users {
+    id
+    name
+    email
+  }
+}
 query getUserConversations($userId: Int!) {
   userConversations(userId: $userId) {
     id
     name
     users {
       id
+      name
       email
     }
   }
@@ -26,6 +34,7 @@ query getConversationMessages($conversationId: Int!) {
     timestamp
     user {
       id
+      name
       email
     }
   }
@@ -59,13 +68,5 @@ mutation sendMessage($userId: Int!, $conversationId: Int!, $content: String!) {
     id
     content
     timestamp
-    user {
-      id
-      email
-    }
-    conversation {
-      id
-      name
-    }
   }
 }

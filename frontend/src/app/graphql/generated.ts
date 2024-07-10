@@ -77,6 +77,7 @@ export type Query = {
   message: Message;
   user: User;
   userConversations: Array<Conversation>;
+  users: Array<User>;
 };
 
 
@@ -104,6 +105,16 @@ export type QueryUserConversationsArgs = {
   userId: Scalars['Int']['input'];
 };
 
+export type Subscription = {
+  __typename?: 'Subscription';
+  messageAdded: Message;
+};
+
+
+export type SubscriptionMessageAddedArgs = {
+  conversationId: Scalars['Int']['input'];
+};
+
 export type User = {
   __typename?: 'User';
   conversations: Array<Conversation>;
@@ -121,19 +132,24 @@ export type GetUserQueryVariables = Exact<{
 
 export type GetUserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: number, email: string, name: string } };
 
+export type GetAllUsersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAllUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: number, name: string, email: string }> };
+
 export type GetUserConversationsQueryVariables = Exact<{
   userId: Scalars['Int']['input'];
 }>;
 
 
-export type GetUserConversationsQuery = { __typename?: 'Query', userConversations: Array<{ __typename?: 'Conversation', id: number, name: string, users: Array<{ __typename?: 'User', id: number, email: string }> }> };
+export type GetUserConversationsQuery = { __typename?: 'Query', userConversations: Array<{ __typename?: 'Conversation', id: number, name: string, users: Array<{ __typename?: 'User', id: number, name: string, email: string }> }> };
 
 export type GetConversationMessagesQueryVariables = Exact<{
   conversationId: Scalars['Int']['input'];
 }>;
 
 
-export type GetConversationMessagesQuery = { __typename?: 'Query', conversationMessages: Array<{ __typename?: 'Message', id: number, content: string, timestamp: any, user: { __typename?: 'User', id: number, email: string } }> };
+export type GetConversationMessagesQuery = { __typename?: 'Query', conversationMessages: Array<{ __typename?: 'Message', id: number, content: string, timestamp: any, user: { __typename?: 'User', id: number, name: string, email: string } }> };
 
 export type CreateUserMutationVariables = Exact<{
   email: Scalars['String']['input'];
@@ -189,6 +205,26 @@ export const GetUserDocument = gql`
       super(apollo);
     }
   }
+export const GetAllUsersDocument = gql`
+    query GetAllUsers {
+  users {
+    id
+    name
+    email
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetAllUsersGQL extends Apollo.Query<GetAllUsersQuery, GetAllUsersQueryVariables> {
+    document = GetAllUsersDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
 export const GetUserConversationsDocument = gql`
     query getUserConversations($userId: Int!) {
   userConversations(userId: $userId) {
@@ -196,6 +232,7 @@ export const GetUserConversationsDocument = gql`
     name
     users {
       id
+      name
       email
     }
   }
@@ -220,6 +257,7 @@ export const GetConversationMessagesDocument = gql`
     timestamp
     user {
       id
+      name
       email
     }
   }

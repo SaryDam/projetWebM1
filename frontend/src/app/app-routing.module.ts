@@ -8,7 +8,7 @@ import {HomeChatComponent} from "./home-chat/home-chat.component";
 const routes: Routes = [
   { path: '', component : ConnexionPageComponent },
   { path: 'home', component : HomeComponent },
-  { path: 'chat', component : HomeChatComponent },
+  { path: 'chat/:id', component : HomeChatComponent },
 ];
 
 @NgModule({

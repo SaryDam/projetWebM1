@@ -16,7 +16,8 @@ import {
   CreateUserMutation,
   LoginMutation,
   CreateConversationMutation,
-  SendMessageMutation,
+  SendMessageMutation, GetAllUsersGQL, GetAllUsersQuery,
+
 } from '../graphql/generated';
 
 @Injectable({
@@ -30,13 +31,20 @@ export class GraphqlService {
     private createUserGQL: CreateUserGQL,
     private loginGQL: LoginGQL,
     private createConversationGQL: CreateConversationGQL,
-    private sendMessageGQL: SendMessageGQL
+    private sendMessageGQL: SendMessageGQL,
+    private getAllUsersGQL: GetAllUsersGQL
   ) {}
 
   getUser(id: number): Observable<GetUserQuery['user']> {
     return this.getUserGQL
       .fetch({ id })
       .pipe(map((result) => result.data.user));
+  }
+
+  getAllUsers(): Observable<GetAllUsersQuery['users']> {
+    return this.getAllUsersGQL
+      .watch()
+      .valueChanges.pipe(map((result) => result.data.users));
   }
 
   getUserConversations(userId: number): Observable<GetUserConversationsQuery['userConversations']> {
@@ -74,4 +82,6 @@ export class GraphqlService {
       .mutate({ userId, conversationId, content })
       .pipe(map((result) => result.data!.sendMessage));
   }
+
+
 }

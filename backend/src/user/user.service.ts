@@ -10,6 +10,10 @@ export class UserService {
     return this.prisma.user.findUnique({ where: { id } });
   }
 
+  async getAllUsers(): Promise<User[]> {
+    return this.prisma.user.findMany();
+  }
+
   async createUser(email: string, name: string, password: string): Promise<User> {
     return this.prisma.user.create({
       data: {
