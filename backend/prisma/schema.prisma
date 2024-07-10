@@ -1,0 +1,35 @@
+datasource db {
+  provider = "sqlite" // ou "postgresql", "mysql", etc.
+  url      = env("DATABASE_URL")
+}
+
+// Configuration du générateur Prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            Int            @id @default(autoincrement())
+  email         String         @unique
+  name          String
+  password      String
+  conversations Conversation[]
+  messages      Message[]
+}
+
+model Conversation {
+  id       Int       @id @default(autoincrement())
+  name     String
+  users    User[]
+  messages Message[]
+}
+
+model Message {
+  id             Int          @id @default(autoincrement())
+  content        String
+  timestamp      DateTime     @default(now())
+  userId         Int
+  conversationId Int
+  user           User         @relation(fields: [userId], references: [id])
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+}
