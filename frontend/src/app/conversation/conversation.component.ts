@@ -31,10 +31,10 @@ interface MessageAddedSubscriptionResponse {
 })
 export class ConversationComponent implements OnInit, OnChanges, OnDestroy {
   @Input() conversationId: number | undefined;
-
   newMessage: string = '';
   messages: GetConversationMessagesQuery['conversationMessages'] | undefined;
-  userId: number = 1;
+  userId: number =  Number(sessionStorage.getItem('ID-user'));
+
   private subscription: Subscription | undefined;
 
   constructor(private graphqlService: GraphqlService, private apollo: Apollo) {}
@@ -107,6 +107,7 @@ export class ConversationComponent implements OnInit, OnChanges, OnDestroy {
         () => {
           this.newMessage = '';
           this.scrollToBottom();
+          location.reload()
         },
         (error) => {
           console.error('Error sending message:', error);

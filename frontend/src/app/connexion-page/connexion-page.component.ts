@@ -32,6 +32,8 @@ export class ConnexionPageComponent {
     this.graphqlService.createUser(this.signInForm.email,this.signUpForm.name, this.signInForm.password).subscribe(
       (user) => {
         console.log('User created in:', user);
+
+        sessionStorage.setItem('ID-user', String(user.id));
       },
       (error) => {
         console.error('Error created in:', error);
@@ -47,6 +49,7 @@ export class ConnexionPageComponent {
         }
         else{
           alert("connexion reussi")
+          sessionStorage.setItem('ID-user', String(user.id));
           this.router.navigate(['/chat/0']);
         }
         console.log('User logged in:', user);

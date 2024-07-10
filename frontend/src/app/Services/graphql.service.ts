@@ -16,9 +16,20 @@ import {
   CreateUserMutation,
   LoginMutation,
   CreateConversationMutation,
-  SendMessageMutation, GetAllUsersGQL, GetAllUsersQuery,
+  SendMessageMutation, GetAllUsersGQL, GetAllUsersQuery, SendMessageMutationVariables,
 
 } from '../graphql/generated';
+import gql from "graphql-tag";
+
+const SEND_MESSAGE_MUTATION = gql`
+  mutation SendMessage($userId: Int!, $conversationId: Int!, $content: String!) {
+    sendMessage(userId: $userId, conversationId: $conversationId, content: $content) {
+      id
+      content
+      timestamp
+    }
+  }
+`;
 
 @Injectable({
   providedIn: 'root',
@@ -32,7 +43,8 @@ export class GraphqlService {
     private loginGQL: LoginGQL,
     private createConversationGQL: CreateConversationGQL,
     private sendMessageGQL: SendMessageGQL,
-    private getAllUsersGQL: GetAllUsersGQL
+    private getAllUsersGQL: GetAllUsersGQL,
+    private apollo: Apollo
   ) {}
 
   getUser(id: number): Observable<GetUserQuery['user']> {
@@ -77,11 +89,25 @@ export class GraphqlService {
       .pipe(map((result) => result.data!.createConversation));
   }
 
+
+  /*
   sendMessage(userId: number, conversationId: number, content: string): Observable<SendMessageMutation['sendMessage']> {
     return this.sendMessageGQL
       .mutate({ userId, conversationId, content })
       .pipe(map((result) => result.data!.sendMessage));
   }
-
+*/
+  sendMessage(userId: number, conversationId: number, content: string): Observable<SendMessageMutation['sendMessage']> {
+    return this.apollo
+      .mutate<SendMessageMutation, SendMessageMutationVariables>({
+        mutation: SEND_MESSAGE_MUTATION,
+        variables: {
+          userId,
+          conversationId,
+          content,
+        },
+      })
+      .pipe(map((result) => result.data!.sendMessage));
+  }
 
 }
