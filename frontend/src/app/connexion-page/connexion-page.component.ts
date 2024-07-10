@@ -29,6 +29,7 @@ export class ConnexionPageComponent {
   }
 
   onSignUp() {
+    console.log('Creating user with email:', this.signUpForm);
     this.graphqlService.createUser(this.signInForm.email,this.signUpForm.name, this.signInForm.password).subscribe(
       (user) => {
         console.log('User created in:', user);

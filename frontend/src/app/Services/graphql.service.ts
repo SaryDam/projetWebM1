@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
-import { Observable } from 'rxjs';
+import {catchError, Observable, throwError} from 'rxjs';
 import { map } from 'rxjs/operators';
 import {
   GetUserGQL,
@@ -16,7 +16,7 @@ import {
   CreateUserMutation,
   LoginMutation,
   CreateConversationMutation,
-  SendMessageMutation, GetAllUsersGQL, GetAllUsersQuery, SendMessageMutationVariables,
+  SendMessageMutation, GetAllUsersGQL, GetAllUsersQuery, SendMessageMutationVariables, CreateUserMutationVariables,
 
 } from '../graphql/generated';
 import gql from "graphql-tag";
@@ -30,6 +30,18 @@ const SEND_MESSAGE_MUTATION = gql`
     }
   }
 `;
+
+
+const CREATE_USER_MUTATION = gql`
+  mutation CreateUser($email: String!, $name: String!, $password: String!) {
+    createUser(email: $email, name: $name, password: $password) {
+      id
+      email
+      name
+    }
+  }
+`;
+
 
 @Injectable({
   providedIn: 'root',
@@ -71,12 +83,31 @@ export class GraphqlService {
       .pipe(map((result) => result.data.conversationMessages));
   }
 
+  /*
   createUser(email: string, name: string, password: string): Observable<CreateUserMutation['createUser']> {
     return this.createUserGQL
       .mutate({ email, name, password })
       .pipe(map((result) => result.data!.createUser));
-  }
+  }*/
 
+  createUser(email: string, name: string, password: string): Observable<CreateUserMutation['createUser']> {
+    return this.apollo
+      .mutate<CreateUserMutation, CreateUserMutationVariables>({
+        mutation: CREATE_USER_MUTATION,
+        variables: {
+          email,
+          name,
+          password,
+        },
+      })
+      .pipe(
+        map(result => result.data!.createUser),
+        catchError(error => {
+          console.error('GraphQL error:', error);
+          return throwError(error);
+        })
+      );
+  }
   login(email: string, password: string): Observable<LoginMutation['login']> {
     return this.loginGQL
       .mutate({ email, password })

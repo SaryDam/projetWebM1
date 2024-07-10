@@ -183,7 +183,7 @@ export type SendMessageMutationVariables = Exact<{
 }>;
 
 
-export type SendMessageMutation = { __typename?: 'Mutation', sendMessage: { __typename?: 'Message', id: number, content: string, timestamp: any, user: { __typename?: 'User', id: number, email: string }, conversation: { __typename?: 'Conversation', id: number, name: string } } };
+export type SendMessageMutation = { __typename?: 'Mutation', sendMessage: { __typename?: 'Message', id: number, content: string, timestamp: any } };
 
 export const GetUserDocument = gql`
     query getUser($id: Int!) {
@@ -339,14 +339,6 @@ export const SendMessageDocument = gql`
     id
     content
     timestamp
-    user {
-      id
-      email
-    }
-    conversation {
-      id
-      name
-    }
   }
 }
     `;
