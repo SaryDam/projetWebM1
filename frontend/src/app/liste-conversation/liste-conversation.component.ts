@@ -17,6 +17,7 @@ export class ListeConversationComponent {
   userId = 5; // ID de l'utilisateur, vous pouvez le changer dynamiquement selon vos besoins
   conversations: GetUserConversationsQuery['userConversations'] | undefined;
   showNewConversationModal : boolean = false;
+  newConversationName: string = ''; // Nom de la nouvelle discussion
   users: GetAllUsersQuery['users'] | undefined;
   ngOnInit(): void {
     this.graphqlService.getUserConversations(Number(this.userId)).subscribe(
@@ -57,9 +58,10 @@ export class ListeConversationComponent {
     });
   }
   createConversation(userIdEx: number): void {
-    // Votre logique pour créer une nouvelle conversation
-    // Exemple :
-    this.graphqlService.createConversation([this.userId, userIdEx],"test").subscribe(() => {
+  if(this.newConversationName == ''){
+    alert("veuillez renseigné un nom pour la discussion")
+  }else{
+    this.graphqlService.createConversation([this.userId, userIdEx],this.newConversationName).subscribe(() => {
       this.closeNewConversation();
       // Rafraîchir la liste des conversations après la création
       console.log("this.userId "+this.userId)
@@ -67,6 +69,8 @@ export class ListeConversationComponent {
       this.refreshConversations();
       location.reload()
     });
+  }
+
 
 
   }

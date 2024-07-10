@@ -21,6 +21,8 @@
   <div class="modal-content">
     <span class="close" (click)="closeNewConversation()">&times;</span>
     <h2>Nouvelle discussion</h2>
+    <input type="text" [(ngModel)]="newConversationName" placeholder="Nom de la discussion" />
+    <h2>Cliquez sur l'utilisateur souhaitez pour crée une discussions</h2>
     <ul>
       <li *ngFor="let user of users" (click)="createConversation(user.id)">
         {{ user.name }}
@@ -28,3 +30,4 @@
     </ul>
   </div>
 </div>
+

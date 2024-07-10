@@ -8,6 +8,8 @@ import { Message } from '@prisma/client';
 
 @Injectable()
 export class MessageService {
+  private pendingMessages = new Map<string, (value: Message | PromiseLike<Message>) => void>();
+
   constructor(
       public prisma: PrismaService,
       @Inject(PUB_SUB) private pubSub: PubSub,
@@ -17,23 +19,28 @@ export class MessageService {
   async getMessage(id: number): Promise<Message> {
     return this.prisma.message.findUnique({ where: { id } });
   }
-  async sendMessage(userId: number, conversationId: number, content: string): Promise<Message> {
-    const message = await this.prisma.message.create({
-      data: {
-        content,
-        user: { connect: { id: userId } },
-        conversation: { connect: { id: conversationId } },
-      },
-    });
 
-    await this.messageQueue.add('sendMessage', {
+  async sendMessage(userId: number, conversationId: number, content: string): Promise<Message> {
+    const job = await this.messageQueue.add('sendMessage', {
       userId,
       conversationId,
       content,
     });
 
-    this.pubSub.publish('messageAdded', { messageAdded: message });
+    const messagePromise = new Promise<Message>((resolve) => {
+      this.pendingMessages.set(job.id.toString(), resolve);
+    });
 
-    return message;
+    console.log('Adding job to queue');
+
+    return messagePromise;
+  }
+
+  resolveMessage(jobId: string, message: Message) {
+    const resolve = this.pendingMessages.get(jobId);
+    if (resolve) {
+      resolve(message);
+      this.pendingMessages.delete(jobId);
+    }
   }
 }

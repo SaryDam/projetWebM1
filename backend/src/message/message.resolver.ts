@@ -54,7 +54,7 @@ export class MessageResolver {
   }
 
   @Subscription(returns => Message, {
-    filter: (payload, variables, context) => {
+    filter: (payload, variables) => {
       return payload.messageAdded.conversationId === variables.conversationId;
     },
   })
