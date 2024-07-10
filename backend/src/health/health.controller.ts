@@ -4,11 +4,11 @@ import { Queue } from 'bull';
 
 @Controller('health')
 export class HealthController {
-  constructor(@InjectQueue('health') private readonly healthQueue: Queue) {}
+  constructor(@InjectQueue('health') private healthQueue: Queue) {}
 
   @Get()
-  async healthCheck(): Promise<string> {
-    await this.healthQueue.add('check', {
+  async getHealthCheck(): Promise<string> {
+    await this.healthQueue.add('healthCheckJob', {
       timestamp: new Date().toISOString(),
     });
     return 'OK';

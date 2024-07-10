@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
+
+import { join } from 'path';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { join } from 'path';
-import { UtilisateurModule } from './model/utilisateur/utilisateur.module';
-import { ConversationModule } from './model/conversation/conversation.module';
-import { MessageModule } from './model/message/message.module';
+import { ConversationModule } from './conversation/conversation.module';
+import { MessageModule } from './message/message.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -12,7 +13,7 @@ import { MessageModule } from './model/message/message.module';
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
     }),
-    UtilisateurModule,
+    UserModule,
     ConversationModule,
     MessageModule,
   ],
