@@ -8,7 +8,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Installer les dépendances du projet
-RUN npm install
+RUN npm install --force
 
 # Copier tout le contenu du projet dans le répertoire de travail
 COPY . .
@@ -20,7 +20,7 @@ RUN npm run build
 RUN npm install -g serve
 
 # Exposer le port sur lequel l'application écoute
-EXPOSE 5000
+EXPOSE 4200
 
 # Définir la commande pour démarrer l'application
 CMD ["serve", "-s", "build"]
