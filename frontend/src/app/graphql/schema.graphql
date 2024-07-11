@@ -1,0 +1,34 @@
+# src/app/graphql/schema.graphql
+
+type User {
+  id: Int!
+  email: String!
+  name: String!
+}
+
+type Conversation {
+  id: Int!
+  name: String!
+  users: [User!]!
+}
+
+type Message {
+  id: Int!
+  content: String!
+  timestamp: String!
+  user: User!
+  conversation: Conversation!
+}
+
+type Query {
+  user(id: Int!): User
+  userConversations(userId: Int!): [Conversation!]
+  conversationMessages(conversationId: Int!): [Message!]
+}
+
+type Mutation {
+  createUser(email: String!, name: String!, password: String!): User!
+  login(email: String!, password: String!): User
+  createConversation(userIds: [Int!]!, name: String!): Conversation
+  sendMessage(userId: Int!, conversationId: Int!, content: String!): Message
+}

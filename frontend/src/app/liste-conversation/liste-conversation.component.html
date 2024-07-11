@@ -1,0 +1,33 @@
+<div class="container">
+  <div class="conversation">
+    <div>
+      <h2>Conversations</h2>
+      <ul *ngIf="conversations && conversations.length > 0">
+        <li *ngFor="let conversation of conversations" (click)="getMessage(conversation.id)">
+          <strong>{{ conversation.name }}</strong>
+          <ul>
+            <li>{{ conversation.users[1].name }}</li>
+          </ul>
+        </li>
+      </ul>
+
+    </div>
+    <button class="new-conversation-button" (click)="openNewConversation()">Nouvelle discussion</button>
+  </div>
+
+</div>
+
+<div class="modal" *ngIf="showNewConversationModal">
+  <div class="modal-content">
+    <span class="close" (click)="closeNewConversation()">&times;</span>
+    <h2>Nouvelle discussion</h2>
+    <input type="text" [(ngModel)]="newConversationName" placeholder="Nom de la discussion" />
+    <h2>Cliquez sur l'utilisateur souhaitez pour crée une discussions</h2>
+    <ul>
+      <li *ngFor="let user of users" (click)="createConversation(user.id)">
+        {{ user.name }}
+      </li>
+    </ul>
+  </div>
+</div>
+

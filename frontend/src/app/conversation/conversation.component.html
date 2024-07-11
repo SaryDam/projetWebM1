@@ -1,0 +1,17 @@
+<div class="messages-container">
+  <div class="messages-list-container">
+    <ul class="messages-list">
+      <li *ngFor="let message of messages" [ngClass]="{'own-message': message.user.id === userId, 'other-message': message.user.id !== userId}">
+        <div class="message-content">
+          <strong>{{ message.user.name }}:</strong> {{ message.content }}
+          <div class="timestamp">{{ message.timestamp | date:'short' }}</div>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div class="message-input-container">
+    <input type="text" [(ngModel)]="newMessage" placeholder="Tapez votre message ici..." (keyup.enter)="sendMessage()" />
+    <button (click)="sendMessage()">Envoyer</button>
+  </div>
+</div>
+
