@@ -14,7 +14,7 @@ export class ListeConversationComponent {
               private graphqlService: GraphqlService) {}
 
 
-  userId = 5; // ID de l'utilisateur, vous pouvez le changer dynamiquement selon vos besoins
+  userId = Number(sessionStorage.getItem('ID-user')); // ID de l'utilisateur, vous pouvez le changer dynamiquement selon vos besoins
   conversations: GetUserConversationsQuery['userConversations'] | undefined;
   showNewConversationModal : boolean = false;
   newConversationName: string = ''; // Nom de la nouvelle discussion
@@ -61,6 +61,8 @@ export class ListeConversationComponent {
   if(this.newConversationName == ''){
     alert("veuillez renseigné un nom pour la discussion")
   }else{
+    console.log(this.userId)
+    console.log(userIdEx)
     this.graphqlService.createConversation([this.userId, userIdEx],this.newConversationName).subscribe(() => {
       this.closeNewConversation();
       // Rafraîchir la liste des conversations après la création

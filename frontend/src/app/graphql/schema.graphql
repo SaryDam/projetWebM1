@@ -4,12 +4,16 @@ type User {
   id: Int!
   email: String!
   name: String!
+  password: String!
+  messages: [Message!]!
+  conversations: [Conversation!]!
 }
 
 type Conversation {
   id: Int!
   name: String!
   users: [User!]!
+  messages: [Message!]!
 }
 
 type Message {
@@ -24,6 +28,7 @@ type Query {
   user(id: Int!): User
   userConversations(userId: Int!): [Conversation!]
   conversationMessages(conversationId: Int!): [Message!]
+  users: [User!]!
 }
 
 type Mutation {
@@ -31,4 +36,8 @@ type Mutation {
   login(email: String!, password: String!): User
   createConversation(userIds: [Int!]!, name: String!): Conversation
   sendMessage(userId: Int!, conversationId: Int!, content: String!): Message
+}
+
+type Subscription {
+  messageAdded(conversationId: Int!): Message!
 }

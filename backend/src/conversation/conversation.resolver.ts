@@ -24,6 +24,7 @@ export class ConversationResolver {
     @Args({ name: 'userIds', type: () => [Int] }) userIds: number[],
     @Args('name') name: string,
   ) {
-    return this.conversationService.createConversation(userIds, name);
+    return await this.conversationService.createConversation(userIds, name);
   }
 }
+
