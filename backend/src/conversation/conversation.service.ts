@@ -10,16 +10,20 @@ export class ConversationService {
     return this.prisma.conversation.findUnique({ where: { id } });
   }
 
-  async createConversation(userIds: number[], name: string): Promise<Conversation> {
+  async createConversation(
+    userIds: number[],
+    name: string,
+  ): Promise<Conversation> {
     return this.prisma.conversation.create({
       data: {
         name,
         users: {
-          connect: userIds.map(id => ({ id })),
+          connect: userIds.map((id) => ({ id })),
         },
       },
       include: {
         users: true,
+        messages: true,
       },
     });
   }
