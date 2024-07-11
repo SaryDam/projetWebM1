@@ -1,18 +1,16 @@
 import { Module } from '@nestjs/common';
 import { BullModule } from '@nestjs/bull';
-import { MessageService } from './message.service';
 import { MessageResolver } from './message.resolver';
+import { MessageService } from './message.service';
 import { MessageProcessor } from './message.processor';
 import { PrismaService } from '../prisma.service';
-import { PubSubModule } from '../common/pub-sub.module';
 
 @Module({
   imports: [
     BullModule.registerQueue({
-      name: 'message-queue',
+      name: 'message',
     }),
-    PubSubModule,
   ],
-  providers: [MessageService, MessageResolver, MessageProcessor, PrismaService],
+  providers: [MessageResolver, MessageService, MessageProcessor, PrismaService],
 })
 export class MessageModule {}

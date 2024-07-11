@@ -18,9 +18,6 @@ export class ConversationService {
           connect: userIds.map(id => ({ id })),
         },
       },
-      include: {
-        users: true,
-      },
     });
   }
 

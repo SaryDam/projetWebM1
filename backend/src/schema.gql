@@ -2,13 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Conversation {
-  id: Int!
-  name: String!
-  users: [User!]!
-  messages: [Message!]!
-}
-
 type Message {
   id: Int!
   content: String!
@@ -31,8 +24,14 @@ type User {
   conversations: [Conversation!]!
 }
 
-type Query {
+type Conversation {
+  id: Int!
+  name: String!
   users: [User!]!
+  messages: [Message!]!
+}
+
+type Query {
   user(id: Int!): User!
   userConversations(userId: Int!): [Conversation!]!
   conversation(id: Int!): Conversation!
@@ -45,8 +44,4 @@ type Mutation {
   login(email: String!, password: String!): User
   createConversation(userIds: [Int!]!, name: String!): Conversation!
   sendMessage(userId: Int!, conversationId: Int!, content: String!): Message!
-}
-
-type Subscription {
-  messageAdded(conversationId: Int!): Message!
 }

@@ -7,17 +7,10 @@ import { Conversation } from "../conversation/conversation.model";
 export class UserResolver {
   constructor(private userService: UserService) {}
 
-
-  @Query(returns => [User])
-  async users() {
-    return this.userService.getAllUsers();
-  }
-
   @Query(returns => User)
   async user(@Args('id', { type: () => Int }) id: number) {
     return this.userService.getUser(id);
   }
-
 
   @Mutation(returns => User)
   async createUser(
