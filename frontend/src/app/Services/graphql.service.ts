@@ -163,10 +163,6 @@ export class GraphqlService {
       })
       .pipe(
         map(result => result.data!.createConversation),
-        catchError(error => {
-          console.error('GraphQL error:', error);
-          return throwError(error);
-        })
       );
   }
 
