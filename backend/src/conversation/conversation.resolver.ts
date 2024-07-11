@@ -21,8 +21,8 @@ export class ConversationResolver {
 
   @Mutation(returns => Conversation)
   async createConversation(
-      @Args('userIds', { type: () => [Int] }) userIds: number[],
-      @Args('name') name: string,
+    @Args({ name: 'userIds', type: () => [Int] }) userIds: number[],
+    @Args('name') name: string,
   ) {
     return await this.conversationService.createConversation(userIds, name);
   }
